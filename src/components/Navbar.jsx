@@ -1,35 +1,39 @@
-// components/Navbar.jsx
-import React from "react";
-import { NavLink } from "react-router-dom";
-import { Home, Search, BookMarked, Layers, Settings } from "lucide-react";
+import React, { useEffect, useRef } from "react";
 
 export default function Navbar() {
-  const navItems = [
-    { to: "/", icon: <Home size={22} />, label: "Home" },
-    { to: "/search", icon: <Search size={22} />, label: "Search" },
-    { to: "/categories", icon: <Layers size={22} />, label: "Categories" },
-    { to: "/saved", icon: <BookMarked size={22} />, label: "Saved" },
-    { to: "/settings", icon: <Settings size={22} />, label: "More" },
-  ];
+  const navRef = useRef(null);
+
+  useEffect(() => {
+    const nav = navRef.current;
+    const showBg = () => {
+      if (window.scrollY > 50) nav.classList.add("bg-white/10", "backdrop-blur-lg");
+      else nav.classList.remove("bg-white/10", "backdrop-blur-lg");
+    };
+    window.addEventListener("scroll", showBg);
+    return () => window.removeEventListener("scroll", showBg);
+  }, []);
+
+  const scrollTo = (id) => document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
 
   return (
-    <nav className="fixed bottom-0 left-0 w-full bg-[#1A1A1A] border-t border-[#FF6B00]/20 py-2 flex justify-around z-50">
-      {navItems.map((item) => (
-        <NavLink
-          key={item.to}
-          to={item.to}
-          className={({ isActive }) =>
-            `flex flex-col items-center text-sm transition ${
-              isActive ? "text-[#FF8C32]" : "text-[#E0E0E0]"
-            }`
-          }
-        >
-          <div className="p-2 rounded-xl hover:bg-[#FF8C32]/10 transition">
-            {item.icon}
-          </div>
-          <span className="text-xs">{item.label}</span>
-        </NavLink>
-      ))}
+    <nav
+      ref={navRef}
+      className="fixed top-0 left-0 w-full z-50 flex items-center justify-between px-8 py-4 text-white transition-all duration-300"
+    >
+      <h2 className="font-bold text-xl tracking-wide cursor-pointer" onClick={() => scrollTo("hero")}>
+        ⚡ FullStack Mastery
+      </h2>
+      <div className="space-x-6 hidden md:flex">
+        {["questions-root", "projects-root"].map((id) => (
+          <button
+            key={id}
+            onClick={() => scrollTo(id)}
+            className="hover:text-cyan-400 transition"
+          >
+            {id === "questions-root" ? "Questions" : "Projects"}
+          </button>
+        ))}
+      </div>
     </nav>
   );
 }
