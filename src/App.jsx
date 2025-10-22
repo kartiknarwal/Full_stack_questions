@@ -53,7 +53,7 @@ export default function App() {
       <ProjectSection />
 
       <footer className="py-8 text-center text-gray-400">
-        Made with ❤️ by <span className="text-cyan-400">Full Stack Devs</span>
+        Made with ❤️ by <span className="text-cyan-400">Kartik Narwal</span>
       </footer>
     </div>
   );
